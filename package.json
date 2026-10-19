@@ -1,0 +1,96 @@
+{
+  "name": "@kira905/dsh-board-toolkit",
+  "version": "0.1.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "DSH 看板与会话运维命令行工具集：建卡/查重/移卡/验收、批量归档与回滚、看板快照与趋势、会话归档与索引瘦身、会话异地镜像（零依赖）",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "task-board",
+    "kanban",
+    "session",
+    "archive",
+    "cli"
+  ],
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "author": "kira905",
+  "homepage": "https://github.com/kira905/dsh-board-toolkit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kira905/dsh-board-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kira905/dsh-board-toolkit/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "board-card": "./board-card.mjs",
+    "board-card-add": "./board-card-add.mjs",
+    "board-dup-check": "./board-dup-check.mjs",
+    "board-archive-bulk": "./board-archive-bulk.mjs",
+    "board-archive-line": "./board-archive-line.mjs",
+    "board-line-backfill": "./board-line-backfill.mjs",
+    "board-merge": "./board-merge.mjs",
+    "board-j1b-trend": "./board-j1b-trend.mjs",
+    "board-selfdev-ratio": "./board-selfdev-ratio.mjs",
+    "board-snapshot-export": "./board-snapshot-export.mjs",
+    "board-upstream-symbol-gate": "./board-upstream-symbol-gate.mjs",
+    "archive-card-sessions": "./archive-card-sessions.mjs",
+    "archive-index-export": "./archive-index-export.mjs",
+    "archive-meta-backfill": "./archive-meta-backfill.mjs",
+    "dsh-session-mirror": "./dsh-session-mirror.mjs",
+    "projcache-prune": "./projcache-prune.mjs",
+    "projcache-restore": "./projcache-restore-archived.mjs",
+    "board-status": "./board-ops/board-status.mjs",
+    "board-card-action": "./board-ops/card-action.mjs",
+    "board-card-note": "./board-ops/card-note.mjs",
+    "board-card-prompt": "./board-ops/card-prompt.mjs",
+    "board-card-run": "./board-ops/card-run.mjs",
+    "board-card-state": "./board-ops/card-state.mjs",
+    "board-panel-fetch": "./board-ops/panel-fetch.mjs",
+    "board-session-state": "./board-ops/session-state.mjs",
+    "board-session-tail": "./board-ops/session-tail.mjs",
+    "board-act": "./board-tools/board-act.mjs",
+    "board-card-dump": "./board-tools/board-card-dump.mjs",
+    "board-card-check": "./board-tools/board-card-status.mjs",
+    "board-brief": "./board-tools/board-status-brief.mjs"
+  },
+  "files": [
+    "board-ops/",
+    "board-tools/",
+    "lib/",
+    "board-card.mjs",
+    "board-card-add.mjs",
+    "board-dup-check.mjs",
+    "board-archive-bulk.mjs",
+    "board-archive-line.mjs",
+    "board-line-backfill.mjs",
+    "board-merge.mjs",
+    "board-j1b-trend.mjs",
+    "board-selfdev-ratio.mjs",
+    "board-snapshot-export.mjs",
+    "board-upstream-symbol-gate.mjs",
+    "archive-card-sessions.mjs",
+    "archive-index-export.mjs",
+    "archive-meta-backfill.mjs",
+    "dsh-session-mirror.mjs",
+    "projcache-prune.mjs",
+    "projcache-restore-archived.mjs",
+    "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "help": "node board-card.mjs --help",
+    "selftest:snapshot": "node board-snapshot-export.mjs --self-test",
+    "selftest:merge": "node board-merge.mjs --self-test",
+    "selftest:guard": "node lib/production-guard.mjs --selftest"
+  }
+}

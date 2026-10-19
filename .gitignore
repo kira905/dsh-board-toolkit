@@ -1,0 +1,22 @@
+# 本机临时文件 / 运行产物
+*.log
+*.tmp
+.tmp-*/
+.DS_Store
+Thumbs.db
+
+# 依赖与构建产物（本仓库零依赖、无构建步骤）
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+*.tgz
+
+# 工具运行时会写出的快照 / 备份 / 台账（属于使用者本机数据，不进仓）
+board-snapshots/
+*.before
+*.bak
+*-state.json
+
+# 发布侧留档（脱敏清单 / 复核报告）不进公开仓
+脱敏清单*.md
+复核报告-*.md
