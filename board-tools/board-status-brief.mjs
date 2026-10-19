@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 只读：拉看板 state，输出「现役主线」汇总 + 全部非 done 在途卡摘要
 // 用法：node board-status-brief.mjs
 const BASE = process.env.DSH_WEB_URL || 'http://localhost:3080';

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 看板卡动作（走 Host HTTP API，绝不手改账本）
 // 用法：node board-act.mjs --card <完整id 或前缀> --kind run|confirm|reject|move [--status todo] [--note "..."]
 // 退出码：0 成功 · 2 用法错 · 3 卡未找到/前缀歧义 · 1 动作失败

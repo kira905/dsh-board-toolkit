@@ -88,7 +88,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "help": "node board-card.mjs --help",
+    "help": "node board-dup-check.mjs --help",
     "selftest:snapshot": "node board-snapshot-export.mjs --self-test",
     "selftest:merge": "node board-merge.mjs --self-test",
     "selftest:guard": "node lib/production-guard.mjs --selftest"

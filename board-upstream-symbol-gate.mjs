@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 符号门（2026-09-14）：区分 import type 与运行时 import，判定上游独有依赖在生产主包 0.1.1-rc.2 上的可用性
 import fs from "node:fs";
 import os from "node:os";

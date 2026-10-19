@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 只读：核一张卡的 status + 最后两条 executions + 执行会话是否在跑（起卡后一次性核对，别轮询）
 // 用法：node board-card-status.mjs <卡id或前缀>
 //

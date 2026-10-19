@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 只读：dump 指定卡（id 或前缀）的 title/status/line/seq/description/prompt
 // 用法：node board-card-dump.mjs <短id> [<短id> ...]
 const BASE = process.env.DSH_WEB_URL || 'http://localhost:3080';

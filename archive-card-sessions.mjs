@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // archive-card-sessions.mjs — 只归档「看板卡触发的执行会话」中超过 N 小时未活跃的
 // 判据：① 该会话 id 出现在 ledger executions[].sessionId ② zstd mtime 距今 >= --hours（默认 6）
 //       ③ Host API 未报 running ④ 尾部无未闭合 turn ⑤ 仓2 有字节相同副本（--allow-unsynced 可放开）

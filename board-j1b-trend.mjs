@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * board-j1b-trend.mjs —— 看板 J1b 趋势判据复算（在看板瘦身 · K5 §10 / 方案 §5 J1）
  *

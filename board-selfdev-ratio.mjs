@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 量化"自研程度"：我们的 src 与上游 0.3.22 同名文件逐行比对（2026-09-14）
 import fs from "node:fs";
 import path from "node:path";
