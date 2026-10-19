@@ -19,15 +19,17 @@ or another agent can drive — with rollback points generated on demand.
 ```bash
 git clone https://github.com/kira905/dsh-board-toolkit.git
 cd dsh-board-toolkit
-node board-card.mjs --help
+node board-card.mjs status --line "mainline name"
 ```
 
 Global install (optional, gives short names such as `board-status`):
 
 ```bash
 npm install -g @kira905/dsh-board-toolkit
-board-status --help
+board-status <cardId>
 ```
+
+> ⚠️ **These CLIs do not implement `--help`**: unknown arguments are ignored and the script **executes for real** (e.g. `board-snapshot-export.mjs --help` really exports a snapshot). Use the arguments listed in the usage table below instead of probing with `--help`.
 
 ## Environment
 

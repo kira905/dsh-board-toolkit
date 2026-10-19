@@ -21,17 +21,19 @@ DSH（DeepSeek Harness）把「任务卡」做成了真会话：一张卡 = 一�
 ```bash
 git clone https://github.com/kira905/dsh-board-toolkit.git
 cd dsh-board-toolkit
-node board-card.mjs --help
+node board-card.mjs status --line "主线名"
 ```
 
 安装成全局命令（可选，会得到 `board-status` / `board-card-run` 等短名）：
 
 ```bash
 npm install -g @kira905/dsh-board-toolkit
-board-status --help
+board-status <cardId>
 ```
 
-也可以直接 `npx @kira905/dsh-board-toolkit board-dup-check --kw 归档`。
+也可以直接 `npx -p @kira905/dsh-board-toolkit board-dup-check --kw 归档`。
+
+> ⚠️ **本仓 CLI 没有实现 `--help`**：未识别的参数会被忽略、脚本**直接执行**（例如 `board-snapshot-export.mjs --help` 会真的导出一份快照）。请照下面每件用途表给的参数调用，不要用 `--help` 试探。
 
 ## 环境变量
 
@@ -92,7 +94,7 @@ board-status --help
 
 | 文件 | 一行用途 | 典型用法 |
 |---|---|---|
-| `dsh-session-mirror.mjs` | 会话与附件增量镜像到对端主机（只增不删、带空壳守卫与远端盘告警） | `node dsh-session-mirror.mjs --help` |
+| `dsh-session-mirror.mjs` | 会话与附件增量镜像到对端主机（只增不删、带空壳守卫与远端盘告警） | `node dsh-session-mirror.mjs --dry-run`（默认即 dry-run） |
 
 ### `board-ops/` · 盯卡运维 9 件
 
