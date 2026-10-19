@@ -24,7 +24,8 @@
  *   · `create` 只能落 `todo`；要进「待规划」用 `--status backlog`（脚本内部再发一次 move）
  *   · 一律走 Host HTTP API（`POST /api/task-board/action`），绝不手改 ledger-v2.json
  *   · baseUrl 默认 http://localhost:3080（本机口径：用 localhost，不用 127.0.0.1）
- *   · workspaceId 默认取本机现有卡通用值；换机或换工作区时用 --ws 覆盖
+ *   · workspaceId 取自 `--ws` 或环境变量 `DSH_WORKSPACE_ID`；两者都没有时**留空**（由宿主决定
+ *     落到哪个工作区）。本发行版**不内置任何具体工作区 id** —— 内置值在换机时会直接建卡失败。
  */
 import fs from 'node:fs';
 import process from 'node:process';
@@ -32,7 +33,8 @@ import process from 'node:process';
 import { DOR_ITEMS, DOD_ITEMS, checkDor, checkDod, checklistLine } from './lib/rulecheck-rules.mjs';
 
 const BASE = process.env.DSH_WEB_URL || 'http://localhost:3080';
-const WS_DEFAULT = '49ec8c83-1983-48b4-b68d-b5bb3564e468';
+// 工作区 id：`--ws` > `DSH_WORKSPACE_ID` > 空串（空串 = 交给宿主回落）。不写死任何 id。
+const WS_DEFAULT = (process.env.DSH_WORKSPACE_ID ?? '').trim();
 const H = { 'content-type': 'application/json', origin: BASE, 'sec-fetch-site': 'same-origin' };
 const argv = process.argv.slice(2);
 const get = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : undefined; };

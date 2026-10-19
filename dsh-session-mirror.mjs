@@ -1037,7 +1037,7 @@ export function rmGuarded(target, o = {}) {
 
 function cleanupLocal(dir) { try { if (dir) rmGuarded(dir, { label: 'fetch-tmp', reason: '--fetch 取回收尾：清本地临时目录' }); } catch { } }
 
-/** 取回通道 A：远端 tar 打包 → scp → 本地解包（mirror-host `tar` 已实测可用 = bsdtar 3.5.2 @ C:\Windows\system32\tar.exe） */
+/** 取回通道 A：远端 tar 打包 → scp → 本地解包（mirror-host `tar` 已实测可用 = bsdtar 3.5.2 @ `%SystemRoot%\system32\tar.exe`） */
 function fetchViaRemoteTar(memberRels) {
   const stamp = `${Date.now()}-${process.pid}`;
   const localTmp = path.join(TMP, `fetch-${stamp}`);

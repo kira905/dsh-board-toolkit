@@ -43,7 +43,8 @@ board-status <cardId>
 | `DSH_HOME` | 宿主 home（放 `sessions/`、`task-board/ledger-v2.json` 等） | `~/.dsh` |
 | `DSH_WEB_URL` / `DSH_BOARD_BASE` / `DSH_BOARD_URL` | 宿主 HTTP 地址 | `http://localhost:3080` |
 | `DSH_MIRROR_HOST` / `DSH_MIRROR_ROOT` | 异地镜像的目标主机与镜像根 | `mirror@example-host` / `~/dsh-session-mirror/local/.dsh` |
-| `DSH_OFFSYNC_ROOT` / `SYNCED_SESSIONS_REPO` | 跨机同步根 / 仓2 会话落地区 | `<workspace 同级>/DSH-offsync` 下 |
+| `DSH_OFFSYNC_ROOT` / `SYNCED_SESSIONS_REPO` | 跨机同步根 / 仓2 会话落地区 | 同步根缺省取 `<workspace 同级>` 下的约定目录名（两变量任一显式给出即覆盖） |
+| `DSH_WORKSPACE_ID` | 建卡时用的工作区 id（`board-card-add` 的 `--ws` 缺省值） | 空（不设即由宿主决定落到哪个工作区） |
 | `BOARD_UPSTREAM_SRC` / `BOARD_PLUGIN_SRC` | 上游看板包 `src` 与本地看板插件 `src`（两个比对类工具必需） | 无（不设则报错退出 2） |
 | `PROJCACHE_PRUNE_SNAPSHOT` | `projcache-restore` 的默认来源快照 | 无（须 `--from`） |
 

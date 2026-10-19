@@ -272,7 +272,7 @@ function selfTest() {
   ok(hit('LTAI' + 'abcdefghijklmnopqrst'), '真 key：LTAI 无分隔纯字母也命中（前缀即形态）');
   ok(hit('sk' + 'Ab12Cd34Ef56Gh78Ij90'), '真 key：无分隔但含数字必须命中');
   ok(!hit('skAbCdEfGhIjKlMnOpQrStUv'), '边界：无分隔且纯字母不判 key（与 camelCase 标识符不可分）');
-  ok(hit('-----BEGIN RSA PRIVATE KEY-----'), '真 key：私钥块必须命中');
+  ok(hit('-----BEGIN ' + 'RSA PRIVATE KEY-----'), '真 key：私钥块必须命中');
   ok(hit('Authorization: Bearer AbCd1234EfGh5678IjKl90'), '真 key：Bearer token 必须命中');
   ok(hit('password = hunter2hunter2'), '真 key：password 赋值必须命中');
   // ④ 误报形态 B（2026-09-16 卡 AT13：卡文本里**合法出现**的凭据样例 / URL 占位符 / 取凭据代码）
@@ -316,8 +316,8 @@ function selfTest() {
     '边界：误报形态在前、真凭证在后 → 仍必须报真凭证（跳过继续找，不是整条放弃）');
   ok(!hit('password = abc123'), '边界：赋值值 6 字符（<8）不得命中');
   // ③ 长度/边界（强形态主体 ≥12：11 位不报、12 位报）
-  ok(!hit('sk-AbCd1234567'), '边界：sk- 主体 11 位不得命中');
-  ok(hit('sk-AbCd12345678'), '边界：sk- 主体 12 位（临界）必须命中');
+  ok(!hit('sk-' + 'AbCd1234567'), '边界：sk- 主体 11 位不得命中');
+  ok(hit('sk-' + 'AbCd12345678'), '边界：sk- 主体 12 位（临界）必须命中');
   ok(norm(' a  b ') === 'ab', 'norm 应折叠空白');
   ok(EXIT.ok === 0 && EXIT.failed === 1 && EXIT.sensitive === 3, '退出码契约必须是 0 / 1 / 3（handoff ②c 依赖）');
   console.log(`[self-test] ${pass} 项通过${fail.length ? '，' + fail.length + ' 项失败: ' + fail.join(' | ') : ''}`);

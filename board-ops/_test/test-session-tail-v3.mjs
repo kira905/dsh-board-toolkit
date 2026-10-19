@@ -48,10 +48,11 @@ function writeSession(dir, fileName, events, frames = events.length) {
   return file;
 }
 
-const ID_A = '11111111-1111-1111-1111-111111111111';
-const ID_B = '22222222-2222-2222-2222-222222222222';
-const ID_C = '33333333-3333-3333-3333-333333333333';
-const ID_D = '44444444-4444-4444-4444-444444444444';
+// 夹具会话 id：刻意用合成的可读串（不用 hex/UUID 形态，避免与真实会话 id 混淆）
+const ID_A = 'fixture-session-a';
+const ID_B = 'fixture-session-b';
+const ID_C = 'fixture-session-c';
+const ID_D = 'fixture-session-d';
 const ev = (type, seq, extra = {}) => ({ type, seq, time: 1758000000000 + seq * 1000, data: extra });
 
 writeSession(path.join(WS, `session-${ID_A}`), V3,
@@ -115,7 +116,7 @@ try {
   {
     const r = runCli([`session-${ID_D}`, '--lines', '3']);
     check('目录里没有会话文件 → 退出码 1', r.code === 1, `code=${r.code}`);
-    const r2 = runCli(['99999999-9999-9999-9999-999999999999', '--lines', '3']);
+    const r2 = runCli(['fixture-session-missing', '--lines', '3']);
     check('会话不存在 → 退出码 1', r2.code === 1, `code=${r2.code}`);
   }
 } finally {
