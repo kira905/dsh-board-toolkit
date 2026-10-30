@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // board-ops / card-prompt.mjs —— 打印单张卡的 title / status / description / prompt（只读）
 //
-// 为什么存在（2026-10-10 多端线第 12 棒起）：
+// 为什么存在（2026-10 起）：
 //   `card-state.mjs` 只给 status / executions / description，**不给 prompt**；
 //   而验收/落卡前提核对（skill task-board §0「run 卡前先核本机口径」、§7.4「逐条对照卡 prompt 里写的验收项实测」）
 //   都必须读卡面 prompt。此前只能拿全量 `GET /state`（~9 MB）自己翻，本工具把它收敛成一条命令。
