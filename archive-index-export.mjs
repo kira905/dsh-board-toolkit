@@ -26,8 +26,26 @@ import path from 'node:path';
 
 import { hostTag } from './lib/host-tag.mjs';
 import { ARCHIVE_DIR, DOCS_DIR } from './lib/workspace.mjs';
+import { cliGuard } from './lib/cli-args.mjs';
 
-const argv = process.argv.slice(2);
+const SPEC = {
+  cmd: 'archive-index-export',
+  summary: '导出归档目录的一级清单（只有目录名 / 文件数 / 字节数 / mtime，绝不含内容），对端据此判「卡里声称的产物到底在不在」。',
+  usage: 'archive-index-export [--archive <目录>] [--out <文件>] [--top 20] [--dry-run] [--json]',
+  flags: [
+    { name: '--archive', arg: '目录', desc: '要建索引的归档根目录' },
+    { name: '--out', arg: '文件', desc: '索引 JSON 落点（缺省落在 docs/ 下）' },
+    { name: '--top', arg: 'N', desc: '每个桶记前 N 个顶层文件名，默认 20' },
+    { name: '--host', arg: '标签', desc: '主机标签（写进文件名）' },
+    { name: '--dry-run', desc: '只打印将要写什么，不落盘' },
+    { name: '--json', desc: '只吐 JSON，不打人读日志' },
+  ],
+  writes: '源目录只读；只写 --out 指定的那一份索引 JSON（不写内容、不算 sha）。--dry-run 时连这份也不写。',
+  dryRun: '加 --dry-run 只打印计划，不落盘。',
+  exits: '0 成功 · 1 采集异常 · 2 用法或前置错误',
+  examples: ['archive-index-export', 'archive-index-export --top 5 --dry-run'],
+};
+const argv = cliGuard(SPEC);
 const has = (f) => argv.includes(f);
 const val = (f, d = null) => { const i = argv.indexOf(f); return i >= 0 ? (argv[i + 1] ?? d) : d; };
 

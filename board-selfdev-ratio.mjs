@@ -2,6 +2,21 @@
 // 量化"自研程度"：我们的 src 与上游 0.3.22 同名文件逐行比对（2026-09-14）
 import fs from "node:fs";
 import path from "node:path";
+import { cliGuard } from "./lib/cli-args.mjs";
+
+const SPEC = {
+  cmd: "board-selfdev-ratio",
+  summary: "量化自研程度：把本仓 src 与上游看板包的同名文件逐行比对，报「仅在对方 / 仅在本地 / 共有」行数。",
+  usage: "board-selfdev-ratio",
+  env: [
+    { name: "BOARD_UPSTREAM_SRC", desc: "上游看板包解包后的 src 目录（必填）" },
+    { name: "BOARD_PLUGIN_SRC", desc: "本仓 / 本地看板插件的 src 目录（必填）" },
+  ],
+  writes: "不写盘、不联网：只读两棵源码树，结果打到 stdout。",
+  exits: "0 成功 · 2 缺环境变量或参数错误",
+  examples: ["BOARD_UPSTREAM_SRC=/path/up/src BOARD_PLUGIN_SRC=./src board-selfdev-ratio"],
+};
+cliGuard(SPEC);
 
 // 两棵树都由环境变量注入（本发行版不内置任何本机路径）：
 //   BOARD_UPSTREAM_SRC = 上游看板包解包后的 src 目录

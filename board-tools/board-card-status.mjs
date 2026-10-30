@@ -16,6 +16,7 @@
 import fs from 'node:fs';
 const BASE = process.env.DSH_WEB_URL || 'http://localhost:3080';
 import { hostRpc, hostRpcJson } from '../lib/dsh-rpc-client.mjs';
+import { cliGuard } from '../lib/cli-args.mjs';
 const H = { origin: BASE, 'sec-fetch-site': 'same-origin' };
 
 /**
@@ -68,8 +69,22 @@ function runningText(entry, s, ctx) {
   return `unknown（会话项 running 非布尔：${JSON.stringify(s.running ?? null)} · 弱判据）`;
 }
 
+const SPEC = {
+  cmd: 'board-card-check',
+  summary: '核一张卡：status + 最后两条执行记录 + 执行会话是否还在跑（起卡后一次性核对，别轮询）。',
+  usage: 'board-card-check <卡id或前缀>',
+  positional: [{ name: '<卡id或前缀>', desc: '目标卡（前缀必须唯一）' }],
+  env: [
+    { name: 'DSH_WEB_URL', desc: '宿主地址，默认 http://localhost:3080' },
+    { name: 'BOARD_CARD_STATUS_SESSIONS_FILE', desc: '测试注入：改读该文件里的会话表响应' },
+  ],
+  writes: '什么都不写：只读看板 state 与会话表。',
+  exits: '0 有结论 · 2 没给参数 · 3 卡未找到 / 会话数据面异常',
+  examples: ['board-card-check 1a2b3c4d'],
+};
+
 async function main() {
-  const short = process.argv[2];
+  const short = cliGuard(SPEC)[0];
   if (!short) { console.error('用法：node board-card-status.mjs <卡id或前缀>'); return 2; }
   const st = await (await fetch(`${BASE}/api/task-board/state`, { headers: H })).json();
   const list = (st.tasks ?? []).filter((t) => t.id.startsWith(short));

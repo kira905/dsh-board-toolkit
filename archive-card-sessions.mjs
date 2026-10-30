@@ -25,8 +25,27 @@ import { SYNCED_SESSIONS_DIR } from './lib/workspace.mjs';
 import { resolveDshHome } from './lib/dsh-home.mjs';
 // R-065 删除面三件套（2026-10-16 · 锁6）：真删源目录前必须过闸（reparse / 白名单 / 作用域 / 生产判定）。
 import { gateDestructive } from './lib/production-guard.mjs';
+import { cliGuard } from './lib/cli-args.mjs';
 
-const ARGS = process.argv.slice(2);
+const SPEC = {
+  cmd: 'archive-card-sessions',
+  summary: '归档「看板卡触发的执行会话」里超过 N 小时未活跃的那些（判据：在账本 executions 里、日志够旧、宿主不报 running、尾部无未闭合 turn）。',
+  usage: 'archive-card-sessions [--hours=6] [--include-subagents] [--apply]',
+  flags: [
+    { name: '--hours', arg: 'N', desc: '未活跃多少小时才归档，默认 6。⚠️ 必须写成 --hours=N 等号形式' },
+    { name: '--include-subagents', desc: '连卡会话派生的子代理会话一起处理' },
+    { name: '--all-subagents', desc: '所有 subagent 派生会话都处理（不限根会话是谁）' },
+    { name: '--allow-unsynced', desc: '放开「异地仓有字节相同副本」这条前置（慎用）' },
+    { name: '--allow-reparse', desc: '逃生舱：连 junction 指向的真实数据一起处理（留痕）' },
+    { name: '--apply', desc: '真搬移（不带就是干跑）' },
+  ],
+  env: [{ name: 'DSH_HOST_API_URL', desc: '宿主地址，默认 http://localhost:3080' }],
+  writes: '默认干跑，只列清单。带 --apply 会把会话目录从 sessions 两段式搬到归档目录（复制→校验字节→删源），并写 manifest 与元数据库。',
+  dryRun: '默认就是干跑；加 --apply 才真搬。',
+  exits: '0 成功 · 1 运行失败或被守卫拦下 · 2 参数错误',
+  examples: ['archive-card-sessions', 'archive-card-sessions --hours=12 --include-subagents --apply'],
+};
+const ARGS = cliGuard(SPEC);
 const DRY = !ARGS.includes('--apply');
 const ALLOW_UNSYNCED = ARGS.includes('--allow-unsynced');
 // R-065 逃生舱：仅当"确实要连 junction 指向的真实数据一起删"时才显式给（留痕）。

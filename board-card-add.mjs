@@ -31,12 +31,40 @@ import fs from 'node:fs';
 import process from 'node:process';
 // 勾选块的项名与判据从 `rulecheck` 的判据库取 —— **单一真源**，本脚本不另抄一份编号/项名清单
 import { DOR_ITEMS, DOD_ITEMS, checkDor, checkDod, checklistLine } from './lib/rulecheck-rules.mjs';
+import { cliGuard } from './lib/cli-args.mjs';
 
 const BASE = process.env.DSH_WEB_URL || 'http://localhost:3080';
 // 工作区 id：`--ws` > `DSH_WORKSPACE_ID` > 空串（空串 = 交给宿主回落）。不写死任何 id。
 const WS_DEFAULT = (process.env.DSH_WORKSPACE_ID ?? '').trim();
 const H = { 'content-type': 'application/json', origin: BASE, 'sec-fetch-site': 'same-origin' };
-const argv = process.argv.slice(2);
+const SPEC = {
+  cmd: 'board-card-add',
+  summary: '从文件建一张看板卡（长文本走文件，避开命令行引号地狱）；可选把 DoR / DoD 勾选块一起组进卡面。',
+  usage: 'board-card-add --title <标题> --prompt <prompt.md> --desc <desc.md> --line <主线> [选项]',
+  flags: [
+    { name: '--title', arg: '标题', desc: '卡标题（必填）' },
+    { name: '--prompt', arg: '文件', desc: '执行会话的 prompt 文件（必填）' },
+    { name: '--desc', arg: '文件', desc: '卡面 description 文件（必填）' },
+    { name: '--line', arg: '主线名', desc: '归线（必填；留空会落进「未归线」桶）' },
+    { name: '--seq', arg: '序号', desc: '卡在主线里的序号' },
+    { name: '--status', arg: '列', desc: '建完立刻移列（如 backlog）' },
+    { name: '--ws', arg: '工作区id', desc: '指定的看板工作区 id（缺省读环境变量）' },
+    { name: '--dor', desc: '自动组一张待填的 DoR 勾选块（落在卡面头部）' },
+    { name: '--dod', desc: '自动组一张待填的 DoD 勾选块（落在卡面尾部）' },
+    { name: '--dor-block', arg: '文件', desc: '用已填好的 DoR 块文件（结构闸不过则拒建）' },
+    { name: '--dod-block', arg: '文件', desc: '用已填好的 DoD 块文件（结构闸不过则拒建）' },
+    { name: '--dry-run', desc: '只打印体积与自检结果，不建卡' },
+  ],
+  env: [
+    { name: 'DSH_WEB_URL', desc: '宿主地址，默认 http://localhost:3080' },
+    { name: 'DSH_WORKSPACE_ID', desc: '默认工作区 id（--ws 优先）' },
+  ],
+  writes: '会向宿主发 create 请求 ⇒ 真正写进看板账本（带 --status 时再多一次 move）。--dry-run 下什么都不写。',
+  dryRun: '加 --dry-run 只打印 prompt / desc 体积、勾选块自检与请求体大小，不建卡。',
+  exits: '0 成功 · 2 用法错误 / 块结构不合格 / 建卡失败',
+  examples: ['board-card-add --title "标题" --prompt p.md --desc d.md --line "主线" --dry-run'],
+};
+const argv = cliGuard(SPEC);
 const get = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : undefined; };
 const has = (f) => argv.includes(f);
 

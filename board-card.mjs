@@ -23,10 +23,39 @@
  */
 import process from 'node:process';
 import { hostRpc, hostRpcJson } from './lib/dsh-rpc-client.mjs';
+import { cliGuard } from './lib/cli-args.mjs';
 
 const BASE = process.env.DSH_WEB_URL || 'http://localhost:3080';
 const H = { 'content-type': 'application/json', origin: BASE, 'sec-fetch-site': 'same-origin' };
-const argv = process.argv.slice(2);
+const SPEC = {
+  cmd: 'board-card',
+  summary: '看板卡操作：查状态 / 执行 / 验收 / 打回 / 移列。一律走宿主 HTTP 接口，绝不手改看板账本文件。',
+  usage: 'board-card <status|run|confirm|reject|move> <cardId> [选项]',
+  commands: [
+    { name: 'status', desc: '只读：卡状态 + 判据②（执行会话是否还在跑）；配 --line 列整条主线' },
+    { name: 'run', desc: '执行：让宿主为这张卡开一个执行会话' },
+    { name: 'confirm', desc: '验收通过：一次性卡 → done，重复卡 → todo' },
+    { name: 'reject', desc: '打回：→ todo，用 --note 写原因' },
+    { name: 'move', desc: '移列：<cardId> <backlog|todo|done>' },
+  ],
+  flags: [
+    { name: '--line', arg: '主线名', desc: 'status 时只列该主线的卡' },
+    { name: '--desc', arg: 'N', desc: 'status 时附带 description 尾部 N 字符（默认全文）' },
+    { name: '--note', arg: '文本', desc: 'reject 的回退原因' },
+    { name: '--dry-run', desc: '只打印将发送的动作，不发任何请求' },
+    { name: '--force', desc: '复核无误后越过双判据门禁（慎用）' },
+  ],
+  positional: [
+    { name: '<cardId>', desc: '完整卡 id' },
+    { name: '[目标列]', desc: '仅 move 需要：backlog / todo / done' },
+  ],
+  env: [{ name: 'DSH_WEB_URL', desc: '宿主地址，默认 http://localhost:3080' }],
+  writes: 'run / confirm / reject / move 会改看板卡状态并在宿主侧落执行记录（经宿主接口串行原子写）；status 只读，什么都不写。',
+  dryRun: '加 --dry-run 只打印将发送的 action，不联网改数据、不写盘。',
+  exits: '0 成功 · 2 用法错误 / 卡未找到 · 3 双判据门禁拒绝 · 1 接口或网络失败',
+  examples: ['board-card status <cardId>', 'board-card status --line "某条主线"', 'board-card confirm <cardId> --dry-run'],
+};
+const argv = cliGuard(SPEC);
 const cmd = argv[0];
 const pos = argv.slice(1).filter((a) => !a.startsWith('--'));
 const get = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : undefined; };

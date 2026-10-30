@@ -29,7 +29,9 @@ npm install -g @kira905/dsh-board-toolkit
 board-status <cardId>
 ```
 
-> ⚠️ **These CLIs do not implement `--help`**: unknown arguments are ignored and the script **executes for real** (e.g. `board-snapshot-export.mjs --help` really exports a snapshot). Use the arguments listed in the usage table below instead of probing with `--help`.
+> ℹ️ **Help & argument gate (since 2026-10-30)**: these 13 CLIs implement `--help` (prints usage, exit 0) and **reject unknown arguments** (exit 2, never executes): `board-card` · `board-card-add` · `board-merge` · `board-snapshot-export` · `archive-card-sessions` · `archive-index-export` · `projcache-prune` · `board-act` · `board-card-dump` · `board-card-check` · `board-brief` · `board-selfdev-ratio` · `board-upstream-symbol-gate`. Each usage text states what the command writes and its exit codes.
+>
+> The remaining historical scripts (`board-ops/` helpers, `archive-meta-backfill`, `dsh-session-mirror`, `projcache-restore`) still ignore unknown arguments and then execute — use the usage tables below for those.
 
 ## Environment
 

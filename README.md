@@ -33,7 +33,9 @@ board-status <cardId>
 
 也可以直接 `npx -p @kira905/dsh-board-toolkit board-dup-check --kw 归档`。
 
-> ⚠️ **本仓 CLI 没有实现 `--help`**：未识别的参数会被忽略、脚本**直接执行**（例如 `board-snapshot-export.mjs --help` 会真的导出一份快照）。请照下面每件用途表给的参数调用，不要用 `--help` 试探。
+> ℹ️ **帮助与参数闸（2026-10-30 起）**：`board-card` · `board-card-add` · `board-merge` · `board-snapshot-export` · `archive-card-sessions` · `archive-index-export` · `projcache-prune` · `board-act` · `board-card-dump` · `board-card-check` · `board-brief` · `board-selfdev-ratio` · `board-upstream-symbol-gate` 这 13 件已支持 `--help`（打印用法、退出码 0）与**未知参数拒收**（退出码 2，绝不继续执行）。用法文本会写清「这个命令会写什么」与退出码。
+>
+> 其余历史脚本（`board-ops/` 下的小工具、`archive-meta-backfill`、`dsh-session-mirror`、`projcache-restore`）仍是旧行为：未识别的参数被忽略、脚本直接执行 —— 对它们请照下面每件用途表给的参数调用，不要用 `--help` 试探。
 
 ## 环境变量
 

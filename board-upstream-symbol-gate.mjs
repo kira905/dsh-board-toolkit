@@ -3,6 +3,22 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { cliGuard } from "./lib/cli-args.mjs";
+
+const SPEC = {
+  cmd: "board-upstream-symbol-gate",
+  summary: "符号门：区分 import type 与运行时 import，判上游独有依赖在本机主包闭包上到底能不能加载。",
+  usage: "board-upstream-symbol-gate",
+  env: [
+    { name: "BOARD_UPSTREAM_SRC", desc: "上游看板包解包后的 src 目录（必填）" },
+    { name: "BOARD_PLUGIN_SRC", desc: "本仓 / 本地看板插件的 src 目录（必填）" },
+    { name: "APPDATA", desc: "用来自动定位全局主包闭包（缺省按用户目录推导）" },
+  ],
+  writes: "不写盘、不联网：只读两棵源码树与本机主包闭包，结论打到 stdout。",
+  exits: "0 通过 · 1 有阻断项 · 2 缺环境变量或参数错误",
+  examples: ["BOARD_UPSTREAM_SRC=/path/up/src BOARD_PLUGIN_SRC=./src board-upstream-symbol-gate"],
+};
+cliGuard(SPEC);
 
 // 两棵树都由环境变量注入（本发行版不内置任何本机路径）：
 //   BOARD_UPSTREAM_SRC = 上游看板包解包后的 src 目录

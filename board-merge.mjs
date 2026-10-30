@@ -49,6 +49,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { readArchivedIdsSync } from './lib/board-archive-view.mjs';
 import { DSH_WORKSPACE } from './lib/workspace.mjs';
+import { cliGuard } from './lib/cli-args.mjs';
 
 // 2026-09-14 环境边界：端口参数化。
 // ⚠️ 宿主会注入 DSH_WEB_URL=http://127.0.0.1:3080（每个 DSH 会话都有）→ 显式 --port/$DSH_PORT
@@ -662,8 +663,30 @@ const isMain = (() => {
   catch { return false; }
 })();
 
+const SPEC = {
+  cmd: 'board-merge',
+  summary: '把对端导出的看板快照并回本机看板。走宿主 HTTP 接口，冲突全部列进报告等人工核，绝不静默覆盖。',
+  usage: 'board-merge [--snapshot <快照.json>] [--apply] [--port N]',
+  flags: [
+    { name: '--snapshot', arg: '文件', desc: '对端导出的快照 JSON（缺省自动找最新一份）' },
+    { name: '--apply', desc: '真并回（不带就是干跑）' },
+    { name: '--dry-run', desc: '显式干跑（与不带 --apply 等价，保留以兼容既有用法）' },
+    { name: '--port', arg: '端口', desc: '宿主端口，优先于 DSH_WEB_URL' },
+    { name: '--self-test', desc: '跑内置自测，不碰任何数据' },
+    { name: '--attach', desc: '只做纯逻辑挂载（供测试驱动用），不执行并回' },
+  ],
+  env: [
+    { name: 'DSH_WEB_URL', desc: '宿主地址，默认 http://localhost:3080' },
+    { name: 'DSH_PORT', desc: '宿主端口（--port 优先）' },
+  ],
+  writes: '不带 --apply 什么都不写（只出报告）。带 --apply 会经宿主接口新建 / 更新卡，并把本机账本备份到归档目录（附 restore 脚本）。',
+  dryRun: '默认就是干跑；加 --apply 才真写。',
+  exits: '0 成功 · 1 并回失败 · 2 参数错误',
+  examples: ['board-merge --snapshot snapshot.json', 'board-merge --snapshot snapshot.json --apply'],
+};
+
 if (isMain) {
-  const args = process.argv.slice(2);
+  const args = cliGuard(SPEC);
   const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 && args[i + 1] ? args[i + 1] : d; };
   if (args.includes('--self-test')) { process.exitCode = selfTest() ? 0 : 1; }
   else if (args.includes('--attach')) {

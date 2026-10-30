@@ -62,8 +62,28 @@ import {
   projcacheLegacyFile, projcacheShardDir, projcacheShardKeys,
   readProjcacheSessionsTable, isValidShardDoc, normalizeSessionId,
 } from './lib/projcache-read.mjs';
+import { cliGuard } from './lib/cli-args.mjs';
 
-const argv = process.argv.slice(2);
+const SPEC = {
+  cmd: 'projcache-prune',
+  summary: '清理会话投影缓存里「磁盘上已不存在」的陈旧记录（缓存契约保证删陈旧行不影响正确性，只让下次冷读多回放一次）。',
+  usage: 'projcache-prune [--apply] [--storages <目录>] [--sessions <目录>] [--home <目录>]',
+  flags: [
+    { name: '--apply', desc: '真删（不带就是只读预演）' },
+    { name: '--storages', arg: '目录', desc: '指定 storages 目录' },
+    { name: '--sessions', arg: '目录', desc: '指定 sessions 根目录' },
+    { name: '--home', arg: '目录', desc: '指定 DSH 数据根（默认自动解析）' },
+    { name: '--backup-root', arg: '目录', desc: '指定备份根（默认工作区归档目录）' },
+    { name: '--meta-store', arg: '目录', desc: '指定归档元数据库所在目录' },
+    { name: '--drop-archived', desc: '显式连归档会话的记录一起删（自带护栏）' },
+    { name: '--keep-archived', desc: '兼容用，已是默认行为（no-op）' },
+  ],
+  writes: '默认只读预演。带 --apply 会删缓存记录，删前自动备份并把回滚命令打出来。⚠️ 必须在 DSH 停止时执行，运行中改文件会被内存态覆盖。',
+  dryRun: '默认就是预演；加 --apply 才写。',
+  exits: '0 成功 · 2 参数或前置错误（如找不到缓存文件） · 1 运行失败',
+  examples: ['projcache-prune', 'projcache-prune --apply'],
+};
+const argv = cliGuard(SPEC);
 const APPLY = argv.includes('--apply');
 const DROP_ARCHIVED = argv.includes('--drop-archived');
 const KEEP_ARCHIVED_FLAG = argv.includes('--keep-archived'); // 兼容 no-op（弃用）

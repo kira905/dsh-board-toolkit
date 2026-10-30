@@ -1,6 +1,18 @@
 #!/usr/bin/env node
 // 只读：拉看板 state，输出「现役主线」汇总 + 全部非 done 在途卡摘要
 // 用法：node board-status-brief.mjs
+import { cliGuard } from '../lib/cli-args.mjs';
+
+const SPEC = {
+  cmd: 'board-status-brief',
+  summary: '一眼看板：现役主线汇总 + 全部非 done 在途卡摘要（只读，随时可跑）。',
+  usage: 'board-status-brief',
+  env: [{ name: 'DSH_WEB_URL', desc: '宿主地址，默认 http://localhost:3080' }],
+  writes: '什么都不写：只读看板 state，结果打到 stdout。',
+  exits: '0 成功 · 2 宿主不可达或参数错误',
+};
+cliGuard(SPEC);
+
 const BASE = process.env.DSH_WEB_URL || 'http://localhost:3080';
 const H = { origin: BASE, 'sec-fetch-site': 'same-origin' };
 

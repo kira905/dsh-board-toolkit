@@ -70,6 +70,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DSH_WORKSPACE } from './lib/workspace.mjs';
+import { cliGuard } from './lib/cli-args.mjs';
 
 const DSH_ROOT = process.env.DSH_ROOT || DSH_WORKSPACE;
 // 落点刻意避开 `snapshots/`（仓3 .gitignore 忽略该目录名 → 快照进不了仓）
@@ -334,8 +335,23 @@ function fail(asJson, code, message) {
   process.exitCode = EXIT.failed;
 }
 
+const SPEC = {
+  cmd: 'board-snapshot-export',
+  summary: '本机看板账本 → 一份可安全跨机的 JSON 快照（只读取证，给对端的 board-merge 用）。',
+  usage: 'board-snapshot-export [--out <目录>] [--label <名>] [--json]',
+  flags: [
+    { name: '--out', arg: '目录', desc: '快照落点目录（缺省为快照目录）' },
+    { name: '--label', arg: '名', desc: '快照标签，写进文件名与报文' },
+    { name: '--json', desc: '只吐一行 compact JSON（供调用方按 stdout 尾行解析）' },
+    { name: '--self-test', desc: '跑内置自测（含脱敏规则负例），不导出' },
+  ],
+  writes: '只读本机账本；唯一产出是 --out 目录下的一份快照 JSON（不含凭据 / 本机路径）+ 变更流水一行。没有 --dry-run：不落盘就什么也拿不到。',
+  exits: '0 成功 · 1 导出失败（账本缺失 / 解析失败） · 3 内容命中敏感规则被拒 · 2 参数错误',
+  examples: ['board-snapshot-export', 'board-snapshot-export --json --label nightly'],
+};
+
 function main() {
-  const args = process.argv.slice(2);
+  const args = cliGuard(SPEC);
   if (args.includes('--self-test')) { process.exitCode = selfTest() ? 0 : 1; return; }
   const opt = (name, def) => { const i = args.indexOf(name); return i >= 0 && args[i + 1] ? args[i + 1] : def; };
   const label = opt('--label', 'board-snapshot');
