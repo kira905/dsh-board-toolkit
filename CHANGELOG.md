@@ -9,7 +9,7 @@
 
 ## v0.1.1 — 2026-10-30
 
-- `board-ops/card-prompt.mjs`：注释去掉内部批次编号（「2026-10-10 多端线第 12 棒起」→「2026-10 起」），行为不变。
+- `board-ops/card-prompt.mjs`：注释去掉内部批次编号（原来的内部批次编号改为「2026-10 起」），行为不变。
 - 脱敏扫描（含注入的私有标识词表）待复核 = 0。
 
 *English: internal batch numbering removed from one comment; no behaviour change.*
