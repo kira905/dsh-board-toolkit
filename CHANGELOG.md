@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.1.2 — 2026-10-30
+
+- 注释与文档清掉内部标识残留（设备标记、内部笔记路径、内部批次编号），行为不变；与 v0.1.1 同一类修复，
+  本次覆盖此前漏掉的位置（含 `lib/host-adapter.mjs` 头部与 `board-line-backfill.mjs` 来源行）。
+
+*English: internal device markers, internal note paths and internal batch numbering removed from comments/docs; no behaviour change.*
+
 ## v0.1.1 — 2026-10-30
 
 - `board-ops/card-prompt.mjs`：注释去掉内部批次编号（「2026-10-10 多端线第 12 棒起」→「2026-10 起」），行为不变。

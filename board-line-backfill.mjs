@@ -3,7 +3,7 @@
  * board-line-backfill.mjs —— 归档卡 `line` 回填器（精确 id 映射 · 默认 dry-run · 一键回滚）
  *
  * 来源：docs\看板主线自动归档-方案-20260914.md §5 P1（归档卡 line 回填）
- *       + docs\长期库大扫除-20260914\docs-pending-cards.md 看板线第 4 项
+ *       + 内部待办清单里的看板线第 4 项（依据见项目内部笔记）
  *
  * 为什么需要 restore→update→archive 三步：
  *   归档卡（archivedAt 有值）**整卡只读**——`update`（含 line/seq）直接报 `archived task is read-only`。
