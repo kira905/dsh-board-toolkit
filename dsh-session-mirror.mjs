@@ -87,7 +87,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DSH_WORKSPACE } from './lib/workspace.mjs';
 
 // M3 · 镜像侧「空壳不得覆盖完整版」守卫（R4）。
-//   判据实现**唯一来源** = dsh-butler\lib\shell-session-watch.mjs（与仓2 侧同源，AT2 卡 8fd47fe1 定案）；
+//   判据实现**唯一来源** = dsh-butler\lib\shell-session-watch.mjs（与仓2 侧同源，内部批次定案）；
 //   本守卫模块只做「候选筛选 + 薄封装 + 记账渲染」，不复制任何判据（复制 = 下次口径漂移的种子）。
 import { guardShellOverwrite, renderShellGuardLines } from './lib/session-mirror-shell-guard.mjs';
 
