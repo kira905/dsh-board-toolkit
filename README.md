@@ -1,5 +1,29 @@
 # dsh-board-toolkit · DSH 看板与会话运维工具集
 
+> ### 这是什么
+> **看板与会话运维的 30 件零依赖 CLI**：任务卡、会话归档与索引、跨机取数 —— 一件一个小脚本，`node` 能跑就够。
+>
+> ### 它解决什么
+> 任务看板一旦「自己维护自己」，卡就不是纸片了，而是**一次真实的 Agent 会话**：谁在跑、跑完该谁验收、失败怎么打回、归档后去哪查。这些操作如果靠人手改 JSON 账本，迟早写坏。所以全部走宿主 HTTP 接口，账本一律由宿主权威持有。
+>
+> ### 一条命令跑起来
+> ```powershell
+> npm i -g @kira905/dsh-board-toolkit
+> board-card status --line "某条主线"    # 只读：整条主线的卡况 + 执行会话是否还在跑
+> ```
+>
+> ### 先看它长什么样（真实输出）
+> ```text
+> 用法
+>   board-card <status|run|confirm|reject|move> <cardId> [选项]
+>
+> 看板卡操作：查状态 / 执行 / 验收 / 打回 / 移列。一律走宿主 HTTP 接口，绝不手改看板账本文件。
+> ```
+>
+> 30 个入口的完整清单见下方「里面有什么」。
+
+---
+
 > **本仓是命令行工具，不挂宿主界面，不需要 `dsh.bundle`、不需要写 `cordis.patch.yml`。** 装它 = `npm i -g @kira905/dsh-board-toolkit`（或 `npx -p @kira905/dsh-board-toolkit board-status`）。装进 profile 也对，但那条 `declares no dsh.bundle` 警告是**正常现象**，不是故障。
 
 ## 装完自检（三条只读验法）
