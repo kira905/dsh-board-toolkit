@@ -1,5 +1,30 @@
 # dsh-board-toolkit · board & session ops for DSH
 
+> ### What this is
+> **30 zero-dependency CLIs for board and session operations**: task cards, session archive/index, off-host data pull — one small script each, nothing but `node` required.
+>
+> ### What it solves
+> Once a task board maintains itself, a card stops being a sticky note: it **is** a real agent session — who is running it, who must confirm it, how a failure goes back, where it lives after archiving. Doing that by hand-editing a JSON ledger eventually corrupts it, so every operation goes through the host HTTP API and the ledger stays host-owned.
+>
+> ### Run it in one command
+> ```powershell
+> npm i -g @kira905/dsh-board-toolkit
+> board-card status --line "<a mainline>"    # read-only: whole mainline + whether the card's session is still running
+> ```
+>
+> ### Real output
+> ```text
+> Usage
+>   board-card <status|run|confirm|reject|move> <cardId> [options]
+>
+> Card operations: status / run / confirm / reject / move. Always via the host HTTP API — never by
+> editing the board ledger file directly.
+> ```
+>
+> See "what's inside" below for the full list of 30 entry points.
+
+---
+
 > Thirty zero-dependency command-line tools for **task-board cards** (create, dedupe, run, accept,
 > archive, merge, snapshot, trend), **sessions** (archive by card, index export, metadata backfill,
 > projection-cache prune/restore) and **off-host session mirroring**.
