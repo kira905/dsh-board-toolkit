@@ -20,7 +20,7 @@
 //   · 对端不可达 ⇒ 退出码 3（benign，供 tickd job 记 deferred、不刷红）
 //
 //   · **通道择路（2026-10-12 卡「镜像通道根治」）**：「**局域网优先 → VPS 中继隧道回落**」，
-//     与 `tools\multi-host-status.mjs` / `tools\tuf-up.mjs` **同源同口径**。取值优先级（方案 §5.2 唯一口径）：
+//     与 `tools\multi-host-status.mjs` / `tools\` 下的对端唤醒工具 **同源同口径**。取值优先级（方案 §5.2 唯一口径）：
 //     env `DSH_MIRROR_HOST`（**调试覆盖**）> 统一开关文件 `mirror.host`（**唯一权威源**）> 脚本默认。
 //     通道候选 = ① host 原样（家里可解析 ⇒ 走局域网）② 由 `~/.ssh/config` **派生**的隧道别名
 //     （判据 = 段 `HostName` 为环回地址、且 `HostKeyAlias`/段名 == 目标机器名，大小写不敏感）
