@@ -33,11 +33,11 @@
 
 ---
 
-> **本仓是命令行工具，不挂宿主界面，不需要 `dsh.bundle`、不需要写 `cordis.patch.yml`。** 装它 = `npm i -g @kira905/dsh-board-toolkit`（或 `npx -p @kira905/dsh-board-toolkit board-status`）。装进 profile 也对，但那条 `declares no dsh.bundle` 警告是**正常现象**，不是故障。
+> **本仓是命令行工具，不挂宿主界面，不需要 `dsh.bundle`（插件 `package.json` 里那行「让 DSH 启动时自动挂上我」的声明）、不需要写 `cordis.patch.yml`（DSH 读的插件挂载清单）。** 装它 = `npm i -g @kira905/dsh-board-toolkit`（或 `npx -p @kira905/dsh-board-toolkit board-status`）。装进 `profile`（放插件的那个格子：`~/.dsh/profiles/<名字>`）也对，但那条 `declares no dsh.bundle` 警告是**正常现象**，不是故障。
 
 ## 装完自检（三条只读验法）
 
-`<profile>` 换成你实际用的 profile（默认 `web`），`<数据根>` 换成你的 DSH 数据根（默认 `~/.dsh`）。
+`<profile>` 换成你实际用的 profile（放插件的那个格子，默认 `web`），`<数据根>` 换成你的 DSH 数据根（默认 `~/.dsh`）。
 
 ```powershell
 # ① 组合树里有没有它（只读、约 0.6 秒、不启服务）
