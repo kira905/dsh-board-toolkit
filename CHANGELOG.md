@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.1.4 — 2026-11-09
+
+- `lib/alert.mjs`：模块头注释里的可插拔通道举例去掉了内部组件名与外部 IM 平台名，改为中性说法
+  「后续可插拔通知通道由调用方通过 addChannel() 注册」；边界声明（通道抛错不影响主流程）原样保留，行为不变。
+
+*English: the pluggable-channel example in the `lib/alert.mjs` header no longer names internal/external channel brands; the boundary statement is kept; no behaviour change.*
+
 ## v0.1.2 — 2026-10-30
 
 - 注释与文档清掉内部标识残留（设备标记、内部笔记路径、内部批次编号），行为不变；与 v0.1.1 同一类修复，
